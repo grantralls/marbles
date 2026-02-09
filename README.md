@@ -11,4 +11,4 @@ This repo was initialized with [Vite's typescript preact template](https://githu
 - Tailwind/Daisy (Utility & Component classes)
 
 # Documentation
-This is a game I'm working on for fun and by myself (at the time). Most documentation will be code comments. If more documentation is needed, it'll be added to this codebases wiki. But don't expect it to be comprehensive.
+This is a game I'm working on for fun and by myself (at the time). Most documentation will be code comments. If more documentation is needed, it'll be added to this codebases wiki.
