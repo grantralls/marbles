@@ -129,13 +129,10 @@ export class Game {
 
             const answer: Move[] = []
 
-            position.backward.forEach((node, i) => {
+            position.backward.forEach((node) => {
                 // a player cannot roll a 4 on the starting position and waltz back into their home row
                 if (marble.player.preHomeNode !== node) {
                     answer.push(...dfsBackward(node, movesLeft - 1))
-                }
-                else {
-                    console.log("fail :(")
                 }
             },
             )
@@ -146,7 +143,6 @@ export class Game {
         const answer = [...dfsForward(marble.position, roll)]
 
         if (roll === 4) {
-            console.log("4 rolled")
             answer.push(...dfsBackward(marble.position, roll))
         }
 

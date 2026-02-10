@@ -1,17 +1,17 @@
 name: Tests
 on:
-  pull_request:
+    pull_request:
 permissions: {}
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - uses: actions/setup-node@v4
-      - run: |
-          pnpm i
-          pnpm test
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install pnpm
+                uses: pnpm/action-setup@v4
+                with:
+                    version: 10
+            - uses: actions/setup-node@v4
+            - run: |
+                    pnpm i
+                    pnpm test
