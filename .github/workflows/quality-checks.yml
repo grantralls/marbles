@@ -1,0 +1,22 @@
+name: Code Quality Checks
+on:
+  pull_request:
+  push:
+permissions: {}
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: |
+          pnpm i
+          pnpm lint
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: pnpm i
+    - name: Run ESLint
+      run: pnpm typecheck

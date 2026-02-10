@@ -11,14 +11,18 @@ export function JoinPage() {
 
     return (
         <>
-            <h1>Marbles</h1>
-            <input value={connectionString} onInput={e => setConnectionString(e.currentTarget.value)} />
-            <button onClick={() => {
-            }}
-            >
-                Connect
-            </button>
-            <p>
+            <h1 className="text-center">Marbles</h1>
+            <div className="flex justify-center">
+                <input className="input" value={connectionString} onInput={e => setConnectionString(e.currentTarget.value)} />
+                <button
+                    className="btn"
+                    onClick={() => {
+                    }}
+                >
+                    Connect
+                </button>
+            </div>
+            <p className="text-center">
                 Room:
                 {id}
             </p>
