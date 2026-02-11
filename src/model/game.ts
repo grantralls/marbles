@@ -54,26 +54,26 @@ export class Game {
 
         // It is 14 spaces from a players start node to the next players start node
         // Each of the 4 players has 4 "starting" spaces.
-        let preHomeRow = head
+        let preHomeNode = head
         for (let i = 0; i < 4; i++) {
-            const newPlayer: Player = { startingPositions: [] }
+            const newPlayer: Player = { startingPositions: [], preHomeNode }
             // Point each starting position to the first ring position
             for (let j = 0; j < 4; j++) {
                 const startingPiece = new BoardNode()
                 newPlayer.startingPositions.push(startingPiece)
-                startingPiece.forward.push(preHomeRow)
+                startingPiece.forward.push(preHomeNode)
             }
 
             // move the first ring position to the first position of the next player
             for (let j = 0; j < 14; j++) {
-                preHomeRow = preHomeRow.forward[0]
+                preHomeNode = preHomeNode.forward[0]
             }
 
             this.players.push(newPlayer)
         }
 
         // The node right before home starts
-        preHomeRow = head.backward[0].backward[0]
+        preHomeNode = head.backward[0].backward[0]
 
         // For each player...
         for (let i = 0; i < 4; i++) {
@@ -88,16 +88,16 @@ export class Game {
             }
 
             // Connect the home row to the node just before it.
-            homeStart.backward.push(preHomeRow)
-            preHomeRow.forward.push(homeStart)
-            this.players[i].preHomeNode = preHomeRow
+            homeStart.backward.push(preHomeNode)
+            preHomeNode.forward.push(homeStart)
+            this.players[i].preHomeNode = preHomeNode
 
             // Players can roll a 4, then go backwards into an opponents home row
             // preHomeRow.backward.push(homeStart)
 
             // move to the next players "pre home row"
             for (let j = 0; j < 14; j++) {
-                preHomeRow = preHomeRow.forward[0]
+                preHomeNode = preHomeNode.forward[0]
             }
         }
 
