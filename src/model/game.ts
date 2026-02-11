@@ -37,8 +37,8 @@ export class Game {
      * Creates the directed graph that represents the board.
      */
     private initializeStructure(): BoardNode {
-        // create a ring of nodes that are doubly linked 56 long
-        // This will be the ring part of the board
+    // create a ring of nodes that are doubly linked 56 long
+    // This will be the ring part of the board
         const head = new BoardNode()
 
         let curr = head
@@ -121,10 +121,6 @@ export class Game {
             return answer
         }
 
-        // BUG: This is totally broken, and should be fixed.
-        // Currently you can't go "backward down a home-row"
-        // and you should be able to for going down an opponents
-        // home row.
         const dfsBackward = (position: BoardNode, movesLeft: number): Move[] => {
             if (movesLeft < 0)
                 return []
