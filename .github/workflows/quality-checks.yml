@@ -1,6 +1,6 @@
 name: Code Quality Checks
 on:
-  pull_request:
+    pull_request:
 permissions: {}
 jobs:
     lint:
@@ -10,7 +10,7 @@ jobs:
             - name: Install pnpm
               uses: pnpm/action-setup@v4
               with:
-                  version: 10
+                version: 10
             - uses: actions/setup-node@v4
             - run: |
                 pnpm i
@@ -18,11 +18,11 @@ jobs:
     typecheck:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
-              with:
-                  version: 10
-            - run: |
+            -uses: actions/checkout@v2
+            -name: Install pnpm
+            uses: pnpm/action-setup@v4
+            with:
+                version: 10
+            -run: |
                 pnpm i
                 pnpm typecheck

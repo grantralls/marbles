@@ -25,7 +25,7 @@ interface Move {
 // Game (State & Moves)
 export class Game {
     // The game head will always be one of the starting points of a player. So as a player rolles a 6 or a 1, that first position they can move to, that's the one.
-    public head: BoardNode
+    protected head: BoardNode
     public players: Player[]
 
     constructor() {
@@ -93,7 +93,7 @@ export class Game {
             this.players[i].preHomeNode = preHomeRow
 
             // Players can roll a 4, then go backwards into an opponents home row
-            preHomeRow.backward.push(homeStart)
+            // preHomeRow.backward.push(homeStart)
 
             // move to the next players "pre home row"
             for (let j = 0; j < 14; j++) {
@@ -106,6 +106,8 @@ export class Game {
 
     public getValidMoves(marble: Marble, roll: number): Move[] {
         const dfsForward = (position: BoardNode, movesLeft: number): Move[] => {
+            if (movesLeft < 0)
+                return []
             if (movesLeft === 0) {
                 return [{
                     newPos: position,
@@ -119,8 +121,13 @@ export class Game {
             return answer
         }
 
-        // TODO: This is totally broken, and should be fixed. Currently you can't go "backward down a home-row" and you should be able to for opponents.
+        // BUG: This is totally broken, and should be fixed.
+        // Currently you can't go "backward down a home-row"
+        // and you should be able to for going down an opponents
+        // home row.
         const dfsBackward = (position: BoardNode, movesLeft: number): Move[] => {
+            if (movesLeft < 0)
+                return []
             if (movesLeft === 0) {
                 return [{
                     newPos: position,
@@ -130,9 +137,12 @@ export class Game {
             const answer: Move[] = []
 
             position.backward.forEach((node) => {
-                // a player cannot roll a 4 on the starting position and waltz back into their home row
-                if (marble.player.preHomeNode !== node) {
-                    answer.push(...dfsBackward(node, movesLeft - 1))
+                answer.push(...dfsBackward(node, movesLeft - 1))
+                for (let i = 0; i < this.players.length; i++) {
+                    // If the marble is at a preHomeNode that isn't the marble's owner, they can back into the home row!
+                    if (node !== marble.player.preHomeNode && node === this.players[i].preHomeNode) {
+                        answer.push(...dfsForward(node.forward[1], movesLeft - 2))
+                    }
                 }
             },
             )

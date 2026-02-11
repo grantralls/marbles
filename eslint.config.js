@@ -6,4 +6,5 @@ export default antfu({
         indent: 4,
         quotes: "double",
     },
+    ignores: ["**/*.yml"],
 })
