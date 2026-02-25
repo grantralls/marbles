@@ -37,8 +37,8 @@ export class Game {
      * Creates the directed graph that represents the board.
      */
     private initializeStructure(): BoardNode {
-    // create a ring of nodes that are doubly linked 56 long
-    // This will be the ring part of the board
+        // create a ring of nodes that are doubly linked 56 long
+        // This will be the ring part of the board
         const head = new BoardNode()
 
         let curr = head
@@ -104,6 +104,12 @@ export class Game {
         return head
     }
 
+    /**
+     * Gets the valid moves given a marble and a dice roll.
+     *
+     * This uses DFS to traverse all possible paths of
+     * the game board.
+     */
     public getValidMoves(marble: Marble, roll: number): Move[] {
         const dfsForward = (position: BoardNode, movesLeft: number): Move[] => {
             if (movesLeft < 0)
@@ -121,7 +127,7 @@ export class Game {
             return answer
         }
 
-        const dfsBackward = (position: BoardNode, movesLeft: number): Move[] => {
+        const dfsBackward = (position: BoardNode, movesLeft: number, prevNode?: BoardNode): Move[] => {
             if (movesLeft < 0)
                 return []
             if (movesLeft === 0) {
@@ -132,16 +138,24 @@ export class Game {
 
             const answer: Move[] = []
 
-            position.backward.forEach((node) => {
-                answer.push(...dfsBackward(node, movesLeft - 1))
-                for (let i = 0; i < this.players.length; i++) {
-                    // If the marble is at a preHomeNode that isn't the marble's owner, they can back into the home row!
-                    if (node !== marble.player.preHomeNode && node === this.players[i].preHomeNode) {
-                        answer.push(...dfsForward(node.forward[1], movesLeft - 2))
-                    }
-                }
-            },
+            position.backward.forEach(node =>
+                answer.push(...dfsBackward(node, movesLeft - 1, position)),
             )
+
+            // Check if the marble is on the preHomeNode of an opponent and if the
+            // previous node is the one in the ring directly after the preHomeNode
+            // If these are true, then the currently moving marble can back into
+            // the opponents home row for some backward attacks!
+            for (let i = 0; i < this.players.length; i++) {
+                // Skip this rule if the player we are iterating over
+                // is the same as the owner of the moving marble.
+                if (this.players[i] === marble.player)
+                    continue
+
+                if (position === this.players[i].preHomeNode && prevNode === this.players[i].preHomeNode.forward[0]) {
+                    answer.push(...dfsForward(position.forward[1], movesLeft - 1))
+                }
+            }
 
             return answer
         }

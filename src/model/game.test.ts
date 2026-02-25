@@ -9,7 +9,7 @@ describe("game data structure", () => {
     const game = new TestableGame()
 
     it("should create a circle 56 nodes long", () => {
-        // forwards
+    // forwards
         let currNode = game.getHead()
         for (let i = 0; i < 56; i++) {
             currNode = currNode.forward[0]
@@ -97,5 +97,21 @@ describe("getValidMoves", () => {
         expect(answer[0].newPos).toEqual(marble.position.forward[0].forward[0].forward[0].forward[0])
         expect(answer[1].newPos).toEqual(marble.position.backward[0].backward[0].backward[0].backward[0])
         expect(answer[2].newPos).toEqual(marble.position.backward[0].backward[0].forward[1].forward[0])
+    })
+
+    it("should return 1 path if a player rolls a 4 in their own home-row", () => {
+        const marble = { position: game.players[0].startingPositions[0].forward[0].backward[0].backward[0].forward[1], player: game.players[0] }
+        const validMoves = game.getValidMoves(marble, 4)
+
+        expect(validMoves.length).toEqual(1)
+        expect(validMoves[0].newPos).toEqual(game.players[0].startingPositions[0].forward[0].backward[0].backward[0].backward[0].backward[0].backward[0])
+    })
+
+    it("should return 1 path if a player rolls a 4 in an opponents home-row", () => {
+        const marble = { position: game.players[1].startingPositions[0].forward[0].backward[0].backward[0].forward[1], player: game.players[0] }
+        const validMoves = game.getValidMoves(marble, 4)
+
+        expect(validMoves.length).toEqual(1)
+        expect(validMoves[0].newPos).toEqual(game.players[1].startingPositions[0].forward[0].backward[0].backward[0].backward[0].backward[0].backward[0])
     })
 })
