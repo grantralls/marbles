@@ -107,7 +107,7 @@ export class Game {
     /**
      * Gets the valid moves given a marble and a dice roll.
      *
-     * Implementation Details: This uses DFS to traverse all possible paths of
+     * This uses DFS to traverse all possible paths of
      * the game board.
      */
     public getValidMoves(marble: Marble, roll: number): Move[] {
@@ -138,8 +138,8 @@ export class Game {
 
             const answer: Move[] = []
 
-            position.backward.forEach((node) =>
-                answer.push(...dfsBackward(node, movesLeft - 1, position))
+            position.backward.forEach(node =>
+                answer.push(...dfsBackward(node, movesLeft - 1, position)),
             )
 
             // Check if the marble is on the preHomeNode of an opponent and if the
@@ -147,10 +147,10 @@ export class Game {
             // If these are true, then the currently moving marble can back into
             // the opponents home row for some backward attacks!
             for (let i = 0; i < this.players.length; i++) {
-
-                // Skip this rule if the player we are iterating over 
+                // Skip this rule if the player we are iterating over
                 // is the same as the owner of the moving marble.
-                if (this.players[i] === marble.player) continue;
+                if (this.players[i] === marble.player)
+                    continue
 
                 if (position === this.players[i].preHomeNode && prevNode === this.players[i].preHomeNode.forward[0]) {
                     answer.push(...dfsForward(position.forward[1], movesLeft - 1))
