@@ -22,15 +22,20 @@ interface Move {
     newPos: BoardNode
 }
 
-// Game (State & Moves)
 export class Game {
-    // The game head will always be one of the starting points of a player. So as a player rolles a 6 or a 1, that first position they can move to, that's the one.
-    protected head: BoardNode
+    private nodes: BoardNode[]
     public players: Player[]
 
     constructor() {
         this.players = []
-        this.head = this.initializeStructure()
+        this.nodes = []
+        this.initializeStructure()
+    }
+
+    public getNode(id: number): BoardNode {
+        if (id >= this.nodes.length || id < 0)
+            throw new Error("invalid node id")
+        return this.nodes[id]
     }
 
     /**
@@ -40,15 +45,18 @@ export class Game {
         // create a ring of nodes that are doubly linked 56 long
         // This will be the ring part of the board
         const head = new BoardNode()
+        this.nodes.push(head)
 
         let curr = head
         for (let i = 0; i < 55; i++) {
             const newNode = new BoardNode()
+            this.nodes.push(newNode)
             curr.forward.push(newNode)
             newNode.backward.push(curr)
             curr = newNode
         }
 
+        // Connect the two ends of the ring
         curr.forward.push(head)
         head.backward.push(curr)
 
@@ -60,6 +68,7 @@ export class Game {
             // Point each starting position to the first ring position
             for (let j = 0; j < 4; j++) {
                 const startingPiece = new BoardNode()
+                this.nodes.push(startingPiece)
                 newPlayer.startingPositions.push(startingPiece)
                 startingPiece.forward.push(preHomeNode)
             }
@@ -79,9 +88,11 @@ export class Game {
         for (let i = 0; i < 4; i++) {
             // Build the home row
             const homeStart = new BoardNode()
+            this.nodes.push(homeStart)
             let currHome = homeStart
             for (let j = 0; j < 3; j++) {
                 const newNode = new BoardNode()
+                this.nodes.push(newNode)
                 currHome.forward.push(newNode)
                 newNode.backward.push(currHome)
                 currHome = newNode
@@ -91,9 +102,6 @@ export class Game {
             homeStart.backward.push(preHomeNode)
             preHomeNode.forward.push(homeStart)
             this.players[i].preHomeNode = preHomeNode
-
-            // Players can roll a 4, then go backwards into an opponents home row
-            // preHomeRow.backward.push(homeStart)
 
             // move to the next players "pre home row"
             for (let j = 0; j < 14; j++) {
