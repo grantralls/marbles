@@ -1,3 +1,4 @@
+// This class should probably have an identifier
 class BoardNode {
     public forward: BoardNode[]
     public backward: BoardNode[]
