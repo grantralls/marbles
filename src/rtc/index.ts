@@ -1,9 +1,9 @@
-import Peer from "peerjs"
+import Peer from "peerjs";
 
-export const peer = new Peer()
+export const peer = new Peer();
 
 peer.on("connection", (conn) => {
     conn.on("data", () => {
-        conn.send("pong")
-    })
-})
+        conn.send("pong");
+    });
+});

@@ -1,6 +1,6 @@
-import { Route, Switch } from "wouter-preact"
-import { GamePage } from "./pages/game/game.page"
-import { JoinPage } from "./pages/join.page"
+import { Route, Switch } from "wouter-preact";
+import { GamePage } from "./pages/game/game.page";
+import { JoinPage } from "./pages/join.page";
 
 export function App() {
     return (
@@ -9,5 +9,5 @@ export function App() {
             <Route path="/game" component={GamePage} />
             <Route>Oops!</Route>
         </Switch>
-    )
+    );
 }
